@@ -1,0 +1,40 @@
+student_dat
+
+CREATE TABLE student_dat (student_id int NOT NULL UNIQUE,
+                                                  first_name varchar(255) NOT NULL,
+                                                                          last_name varchar(255) NOT NULL,
+                                                                                                 PRIMARY KEY (student_id));
+
+
+
+Mark_dat
+
+CREATE TABLE marks_dat (     cour_id varchar(200) NOT NULL,     stud_id varchar(200) NOT NULL,
+marks int not null,      foreign key (cour_id) references course_dat(course_id), FOREIGN KEY (stud_id) REFERENCES students_dat(student_id));
+
+
+
+course_dat
+
+CREATE TABLE course_dat (course_id varchar(200) NOT NULL UNIQUE,                                                          course_name varchar(200) NOT NULL UNIQUE,                                                                                            PRIMARY KEY (course_id));
+
+
+SELECT tempp.Student_Id, tempp.Course_id, tempp.Marks, CASE WHEN tempp.Marks > 90 THEN 'AA' WHEN tempp.Marks BETWEEN 85 AND 90 THEN 'BA' WHEN tempp.Marks BETWEEN 80 AND 85 THEN 'BB' WHEN tempp.Marks BETWEEN 75 AND 80 THEN 'CB' WHEN tempp.Marks BETWEEN 70 AND 75 THEN 'CC' WHEN tempp.Marks BETWEEN 65 AND 70 THEN 'DC' WHEN tempp.Marks BETWEEN 60 AND 65 THEN 'DD' ELSE 'FF' END AS Grade FROM tempp;
+
+
+SELECT students_dat.Student_Id,
+       students_dat.first_name as Name,
+       marks_dat.cour_id as course_id,
+       marks_dat.marks,
+       CASE
+           WHEN marks_dat.marks > 90 THEN 'AA'
+           WHEN marks_dat.marks BETWEEN 85 AND 90 THEN 'BA'
+           WHEN marks_dat.marks BETWEEN 80 AND 85 THEN 'BB'
+           WHEN marks_dat.marks BETWEEN 75 AND 80 THEN 'CB'
+           WHEN marks_dat.marks BETWEEN 70 AND 75 THEN 'CC'
+           WHEN marks_dat.marks BETWEEN 65 AND 70 THEN 'DC'
+           WHEN marks_dat.marks BETWEEN 60 AND 65 THEN 'DD'
+           ELSE 'FF'
+       END AS Grade
+FROM students_dat,marks_dat,course_dat
+where students_dat.student_id = marks_dat.stud_id;
