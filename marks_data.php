@@ -55,24 +55,32 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$sql_1 = "SELECT students_dat.Student_Id,
-     students_dat.first_name as Name,
-     marks_dat.cour_id as course_id,
-     marks_dat.marks,
+$sql_0 = "TRUNCATE tabLe temp";
+
+$sql_1 = "INSERT INTO temp SELECT *
+FROM students_dat
+INNER JOIN marks_dat
+ON marks_dat.stud_id=students_dat.student_id";
+
+$sql_2 = "SELECT temp.Student_Id,
+     temp.first_name as Name,
+     temp.cour_id as course_id,
+     temp.marks,
      CASE
-         WHEN marks_dat.marks > 90 THEN 'S'
-         WHEN marks_dat.marks BETWEEN 85 AND 90 THEN 'A'
-         WHEN marks_dat.marks BETWEEN 80 AND 85 THEN 'B'
-         WHEN marks_dat.marks BETWEEN 75 AND 80 THEN 'C'
-         WHEN marks_dat.marks BETWEEN 70 AND 75 THEN 'C'
-         WHEN marks_dat.marks BETWEEN 65 AND 70 THEN 'D'
-         WHEN marks_dat.marks BETWEEN 60 AND 65 THEN 'E'
+         WHEN temp.marks > 90 THEN 'S'
+         WHEN temp.marks BETWEEN 85 AND 90 THEN 'A'
+         WHEN temp.marks BETWEEN 80 AND 85 THEN 'B'
+         WHEN temp.marks BETWEEN 75 AND 80 THEN 'C'
+         WHEN temp.marks BETWEEN 70 AND 75 THEN 'C'
+         WHEN temp.marks BETWEEN 65 AND 70 THEN 'D'
+         WHEN temp.marks BETWEEN 60 AND 65 THEN 'E'
          ELSE 'F'
      END AS Grade
-FROM students_dat,marks_dat,course_dat
-where students_dat.student_id = marks_dat.stud_id and marks_dat.cour_id = course_dat.course_id";
+FROM temp;";
 
-$result = $conn->query($sql_1);
+$run_0 = $conn->query($sql_0);
+$run_1 = $conn->query($sql_1);
+$result = $conn->query($sql_2);
 
 echo "<table>
 <tr>
